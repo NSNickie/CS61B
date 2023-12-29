@@ -1,5 +1,6 @@
 package game2048;
 
+import java.util.ArrayList;
 import java.util.Formatter;
 
 
@@ -93,9 +94,17 @@ public class Model {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
-
-
-        return false;
+        boolean emptyExists=false;
+        for(int col=0;col<b.size();col++){
+            for (int row=0;row<b.size();row++){
+                Tile tile =b.tile(col,row);
+                if (tile==null){
+                    emptyExists=true;
+                    return emptyExists;
+                }
+            }
+        }
+        return emptyExists;
     }
 
     /**
@@ -105,9 +114,18 @@ public class Model {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        boolean maxExists=false;
+        for(int col=0;col<b.size();col++){
+            for (int row=0;row<b.size();row++){
+                Tile tile =b.tile(col,row);
+                if (tile!=null&&tile.value()==MAX_PIECE){
+                    maxExists=true;
+                    return maxExists;
+                }
+            }
+        }
 
-
-        return false;
+        return maxExists;
     }
 
     /**
@@ -118,9 +136,57 @@ public class Model {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        boolean emptyExists= emptySpaceExists(b);
+        boolean adjoinExists=false;
+        for(int col=0;col<b.size();col++){
+            for (int row=0;row<b.size();row++){
+                Tile tile =b.tile(col,row);
+                int leftCol=col-1;
+                int rightCol=col+1;
+                int upRow=row-1;
+                int downRow=row+1;
+                Tile tileAdjoin;
+                if (isColOrRowValid(leftCol, b)) {
+                    tileAdjoin=b.tile(leftCol,row);
+                    if (tile!=null&&tileAdjoin!=null&&tile.value()==tileAdjoin.value()){
+                        adjoinExists=true;
+                        return adjoinExists;
+                    }
+                }
+                if (isColOrRowValid(rightCol, b)) {
+                    tileAdjoin=b.tile(rightCol,row);
+                    if (tile!=null&&tileAdjoin!=null&&tile.value()==tileAdjoin.value()){
+                        adjoinExists=true;
+                        return adjoinExists;
+                    }
+                }
+                if (isColOrRowValid(upRow, b)) {
+                    tileAdjoin=b.tile(col,upRow);
+                    if (tile!=null&&tileAdjoin!=null&&tile.value()==tileAdjoin.value()){
+                        adjoinExists=true;
+                        return adjoinExists;
+                    }
+                }
+                if (isColOrRowValid(downRow, b)) {
+                    tileAdjoin=b.tile(col,downRow);
+                    if (tile!=null&&tileAdjoin!=null&&tile.value()==tileAdjoin.value()){
+                        adjoinExists=true;
+                        return adjoinExists;
+                    }
+                }
 
 
-        return false;
+
+
+            }
+        }
+
+
+        return emptyExists;
+    }
+
+    public static boolean isColOrRowValid(int c,Board b) {
+        return c >= 0 && c < b.size();
     }
 
     /** Tilt the board toward SIDE.
@@ -138,8 +204,39 @@ public class Model {
     public void tilt(Side side) {
         // TODO: Modify this.board (and if applicable, this.score) to account
         // for the tilt to the Side SIDE.
+        this.board.setViewingPerspective(side);
 
+        for (int col=0;col<this.board.size();col++){
+            ArrayList<Integer> mergedFinRow= new ArrayList<Integer>();
+            for(int row=this.board.size()-2;row>=0;row--){
+                   Tile t=this.board.tile(col,row);
+                   if (t==null){
+                       continue;
+                   }
+                   int finRow=row;
 
+                   for(int i=1;row+i<this.board.size();i++){
+                       if(this.board.tile(col,row+i)==null){
+                           finRow=row+i;
+                       }
+                       if (this.board.tile(col,row+i)!=null){
+                           if (t.value()==this.board.tile(col,row+i).value()){
+                               if(mergedFinRow.contains(row+i)){
+                                   break;
+                               }
+                               finRow=row+i;
+                               this.score+=2*t.value();
+                               mergedFinRow.add(finRow);
+                           }else{
+                               break;
+                           }
+                       }
+                   }
+                   this.board.move(col,finRow,t);
+            }
+            mergedFinRow.clear();
+        }
+        this.board.setViewingPerspective(Side.NORTH);
         checkGameOver();
     }
 
