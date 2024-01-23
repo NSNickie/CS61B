@@ -35,8 +35,10 @@ public class Puzzle {
         return 0;
     }
 
-    /** Loads an answer from the given file.
-     *  Note: Scanner behaves very similarly to the In class. */
+    /**
+     * Loads an answer from the given file.
+     * Note: Scanner behaves very similarly to the In class.
+     */
     public static int loadAnswer(File file) {
         Scanner s;
         try {
