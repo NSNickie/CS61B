@@ -1,12 +1,17 @@
 package deque;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by hug on 2/4/2017. Methods are provided in the suggested order
  * that they should be completed.
  */
-public interface Deque<T> {
+public interface Deque<T> extends Iterable<T>{
+
+    T max();
+
+    T max(Comparator<T> c);
 
     /**
      * Add {@code x} to the front of the deque. Assumes {@code x} is never null.
@@ -77,4 +82,6 @@ public interface Deque<T> {
      * @return element at {@code index} in the deque
      */
     T getRecursive(int index);
+
+    boolean equals();
 }
