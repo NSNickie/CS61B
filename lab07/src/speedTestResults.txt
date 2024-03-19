@@ -1,0 +1,74 @@
+1.
+desired length: 100
+
+1)strings to insert:1000
+   class ULLMap: 0.00 sec
+   class BSTMap: 0.00 sec
+   Java's Built-in TreeMap: 0.00 sec
+   Java's Built-in HashMap: 0.00 sec
+
+2)strings to insert:2000
+   class ULLMap: 0.02 sec
+   class BSTMap: 0.00 sec
+   Java's Built-in TreeMap: 0.00 sec
+   Java's Built-in HashMap: 0.00 sec
+
+3)strings to insert:3000
+   class ULLMap: 0.03 sec
+   class BSTMap: 0.01 sec
+   Java's Built-in TreeMap: 0.00 sec
+   Java's Built-in HashMap: 0.00 sec
+
+4)strings to insert:4000
+   class ULLMap: 0.06 sec
+   class BSTMap: 0.01 sec
+   Java's Built-in TreeMap: 0.01 sec
+   Java's Built-in HashMap: 0.01 sec
+
+5)strings to insert:5000
+    class ULLMap: 0.11 sec
+    class BSTMap: 0.01 sec
+    Java's Built-in TreeMap: 0.01 sec
+    Java's Built-in HashMap: 0.01 sec
+
+6)strings to insert:6000
+    class ULLMap: 0.17 sec
+    class BSTMap: 0.02 sec
+    Java's Built-in TreeMap: 0.01 sec
+    Java's Built-in HashMap: 0.01 sec
+
+7)strings to insert:7000
+    class ULLMap: 0.23 sec
+    class BSTMap: 0.01 sec
+    Java's Built-in TreeMap: 0.01 sec
+    Java's Built-in HashMap: 0.01 sec
+
+8)strings to insert:8000
+    class ULLMap: 0.32 sec
+    class BSTMap: 0.01 sec
+    Java's Built-in TreeMap: 0.01 sec
+    Java's Built-in HashMap: 0.01 sec
+
+9)strings to insert:9000
+    class ULLMap: 0.40 sec
+    class BSTMap: 0.01 sec
+    Java's Built-in TreeMap: 0.01 sec
+    Java's Built-in HashMap: 0.02 sec
+
+10)strings to insert:10000
+    class ULLMap: 0.53 sec
+    class BSTMap: 0.02 sec
+    Java's Built-in TreeMap: 0.02 sec
+    Java's Built-in HashMap: 0.02 sec
+
+11)strings to insert:20000
+    class ULLMap: 2.98 sec
+    class BSTMap: 0.03 sec
+    Java's Built-in TreeMap: 0.03 sec
+    Java's Built-in HashMap: 0.03 sec
+
+12)strings to insert:30000
+    class ULLMap: 6.75 sec
+    class BSTMap: 0.06 sec
+    Java's Built-in TreeMap: 0.06 sec
+    Java's Built-in HashMap: 0.04 sec
