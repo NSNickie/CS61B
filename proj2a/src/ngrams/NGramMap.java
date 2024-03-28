@@ -1,6 +1,12 @@
 package ngrams;
 
+import java.sql.Time;
+import java.time.temporal.Temporal;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Objects;
+
+import edu.princeton.cs.algs4.In;
 
 import static ngrams.TimeSeries.MAX_YEAR;
 import static ngrams.TimeSeries.MIN_YEAR;
@@ -8,7 +14,7 @@ import static ngrams.TimeSeries.MIN_YEAR;
 /**
  * An object that provides utility methods for making queries on the
  * Google NGrams dataset (or a subset thereof).
- *
+ * <p>
  * An NGramMap stores pertinent data from a "words file" and a "counts
  * file". It is not a map in the strict sense, but it does provide additional
  * functionality.
@@ -18,12 +24,17 @@ import static ngrams.TimeSeries.MIN_YEAR;
 public class NGramMap {
 
     // TODO: Add any necessary static/instance variables.
+    public HashMap<String, TimeSeries> wordMap;
+    public HashMap<String, TimeSeries> countMap;
 
     /**
      * Constructs an NGramMap from WORDSFILENAME and COUNTSFILENAME.
      */
     public NGramMap(String wordsFilename, String countsFilename) {
-        // TODO: Fill in this constructor. See the "NGramMap Tips" section of the spec for help.
+        wordMap = new HashMap<String, TimeSeries>();
+        countMap = new HashMap<>();
+        readWordsFile(wordsFilename);
+        readCountsFile(countsFilename);
     }
 
     /**
@@ -95,6 +106,32 @@ public class NGramMap {
     public TimeSeries summedWeightHistory(Collection<String> words) {
         // TODO: Fill in this method.
         return null;
+    }
+
+    private void readWordsFile(String wordsFileName) {
+        In in = new In(wordsFileName);
+        TimeSeries ts = new TimeSeries();
+        String word = null;
+        int i = 0;
+        while (in.hasNextLine()) {
+            i++;
+            String nextline = in.readLine();
+            String[] splitline = nextline.split("\t");
+            if (word == null) {
+                word = splitline[0];
+            }
+            String year = splitline[1];
+            String appear = splitline[2];
+            ts.put(Integer.parseInt(year), Double.parseDouble(appear));
+            if (!Objects.equals(word, splitline[0])) {
+                wordMap.put(word, ts);
+                word = splitline[0];
+            }
+        }
+    }
+
+    private void readCountsFile(String countsFileName) {
+
     }
 
     // TODO: Add any private helper methods.
