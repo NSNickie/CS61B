@@ -9,8 +9,10 @@ import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 
-/** Unit Tests for the NGramMap class.
- *  @author Josh Hug
+/**
+ * Unit Tests for the NGramMap class.
+ *
+ * @author Josh Hug
  */
 public class NGramMapTest {
     @Test
@@ -22,7 +24,10 @@ public class NGramMapTest {
                 (Arrays.asList(646179.0, 677820.0, 697645.0, 795265.0));
 
         TimeSeries request2005to2008 = ngm.countHistory("request");
+        TimeSeries wandered2005to2008 = ngm.countHistory("wandered");
         assertThat(request2005to2008.years()).isEqualTo(expectedYears);
+        assertThat(wandered2005to2008.years()).isEqualTo(expectedYears);
+
 
         for (int i = 0; i < expectedCounts.size(); i += 1) {
             assertThat(request2005to2008.data().get(i)).isWithin(1E-10).of(expectedCounts.get(i));
@@ -58,7 +63,7 @@ public class NGramMapTest {
 
         // returns the relative weight of the word fish in each year between 1850 and 1933.
         TimeSeries fishWeight = ngm.weightHistory("fish", 1850, 1933);
-        assertThat(fishWeight.get(1865)).isWithin(1E-7).of(136497.0/2563919231.0);
+        assertThat(fishWeight.get(1865)).isWithin(1E-7).of(136497.0 / 2563919231.0);
 
         TimeSeries dogCount = ngm.countHistory("dog", 1850, 1876);
         assertThat(dogCount.get(1865)).isWithin(1E-10).of(75819.0);

@@ -35,6 +35,7 @@ public class TimeSeries extends TreeMap<Integer, Double> {
         }
     }
 
+
     /**
      * Returns all years for this TimeSeries (in any order).
      */
