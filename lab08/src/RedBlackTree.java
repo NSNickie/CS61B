@@ -63,6 +63,10 @@ public class RedBlackTree<T extends Comparable<T>> {
        and right children. */
     void flipColors(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
+        node.isBlack = !node.isBlack;
+        node.left.isBlack = !node.left.isBlack;
+        node.right.isBlack = !node.right.isBlack;
+
     }
 
     /* Rotates the given node to the right. Returns the new root node of
@@ -70,7 +74,23 @@ public class RedBlackTree<T extends Comparable<T>> {
        of the new root and the old root!*/
     RBTreeNode<T> rotateRight(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+
+        RBTreeNode<T> nodeB = node;
+        RBTreeNode<T> nodeA = node.left;
+        RBTreeNode<T> rightNodeA = nodeA.right;
+        boolean isBlack = nodeB.isBlack;
+
+        node = nodeA;
+
+        nodeA.right = nodeB;
+
+        nodeB.left = rightNodeA;
+
+        nodeB.isBlack = nodeA.isBlack;
+
+        nodeA.isBlack = isBlack;
+
+        return node;
     }
 
     /* Rotates the given node to the left. Returns the new root node of
@@ -78,7 +98,20 @@ public class RedBlackTree<T extends Comparable<T>> {
        of the new root and the old root! */
     RBTreeNode<T> rotateLeft(RBTreeNode<T> node) {
         // TODO: YOUR CODE HERE
-        return null;
+        RBTreeNode<T> nodeA = node;
+        RBTreeNode<T> nodeB = node.right;
+        RBTreeNode<T> leftNodeB = nodeB.left;
+
+        boolean isBlack = nodeA.isBlack;
+
+        node = nodeB;
+        nodeB.left = nodeA;
+
+        nodeA.right = leftNodeB;
+        nodeA.isBlack = nodeB.isBlack;
+        nodeB.isBlack = isBlack;
+        return node;
+
     }
 
     public void insert(T item) {
@@ -107,13 +140,30 @@ public class RedBlackTree<T extends Comparable<T>> {
 
         // TODO: YOUR CODE HERE
 
-        // Rotate left operation
+        if (node.right != null && !node.right.isBlack) {
+            if (node.left != null && !node.left.isBlack) {
+                flipColors(node);
+            }
+        }
 
-        // Rotate right operation
+        if (node.right != null && !node.right.isBlack) {
+            node = rotateLeft(node);
+        }
 
-        // Color flip
 
-        return null; //fix this return statement
+        if (node.left != null && node.left.left
+                != null && !node.left.isBlack && !node.left.left.isBlack) {
+            node = rotateRight(node);
+            flipColors(node);
+        }
+
+        if (node.left != null && node.left.right != null && !node.left.isBlack && !node.left.right.isBlack) {
+            node.left = rotateLeft(node.left);
+            node = rotateRight(node);
+            flipColors(node);
+        }
+
+        return node; //fix this return statement
     }
 
     /* Returns whether the given node is red. Null nodes (children of leaf
