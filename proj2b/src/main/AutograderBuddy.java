@@ -11,4 +11,5 @@ public class AutograderBuddy {
 
         throw new RuntimeException("Please fill out AutograderBuddy.java!");
     }
+
 }
