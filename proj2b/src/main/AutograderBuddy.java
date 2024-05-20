@@ -4,12 +4,15 @@ import browser.NgordnetQueryHandler;
 
 
 public class AutograderBuddy {
-    /** Returns a HyponymHandler */
+    /**
+     * Returns a HyponymHandler
+     */
     public static NgordnetQueryHandler getHyponymHandler(
             String wordFile, String countFile,
             String synsetFile, String hyponymFile) {
 
-        throw new RuntimeException("Please fill out AutograderBuddy.java!");
+//        throw new RuntimeException("Please fill out AutograderBuddy.java!");
+        return new HyponymsHandler(synsetFile, hyponymFile);
     }
 
 }
