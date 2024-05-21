@@ -2,20 +2,26 @@ package main;
 
 import browser.NgordnetQuery;
 import browser.NgordnetQueryHandler;
+import edu.princeton.cs.algs4.Graph;
 import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Insertion;
+import ngrams.NGramMap;
+import ngrams.TimeSeries;
 import org.apache.hc.core5.annotation.Internal;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.Time;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class HyponymsHandler extends NgordnetQueryHandler {
     public HashMap<Integer, GraphNode> wordMap;
-    public HashMap<String, GraphNode> wordMapWithStringKey;
+    public NGramMap ngramMap;
 
 
-    public HyponymsHandler(String synsetFile, String hyponymFile) {
+    public HyponymsHandler(String wordsFile, String totalCountsFile, String synsetFile, String hyponymFile) {
         this.wordMap = new HashMap<Integer, GraphNode>();
-        this.wordMapWithStringKey = new HashMap<String, GraphNode>();
+        this.ngramMap = new NGramMap(wordsFile, totalCountsFile);
         this.buildGraph(synsetFile, hyponymFile);
     }
 
@@ -30,7 +36,6 @@ public class HyponymsHandler extends NgordnetQueryHandler {
             String definition = splitLine[2];
             GraphNode graphNode = new GraphNode(id, word, definition);
             this.wordMap.put(id, graphNode);
-            this.wordMapWithStringKey.put(word, graphNode);
         }
         while (rawHyponymFile.hasNextLine()) {
             String nextLine = rawHyponymFile.readLine();
@@ -43,25 +48,79 @@ public class HyponymsHandler extends NgordnetQueryHandler {
         }
     }
 
-    public ArrayList<String> findHyponyms(String word) {
-        ArrayList<String> result = new ArrayList<String>();
-        GraphNode graphNode = this.wordMapWithStringKey.get(word);
-        if (graphNode == null) {
-            return null;
-        }
-        result.add(word);
-        for (GraphNode node : graphNode.hyponymSet) {
-            result.add(node.word);
+    public String[] findHyponyms(List<String> words) {
+        HashSet<Integer> hyponymsSet = this.findHyponymsIds(words.get(0));
+        for (String word : words) {
+            hyponymsSet.retainAll(this.findHyponymsIds(word));
         }
 
+        HashSet<String> hyponymsWordSet = new HashSet<String>();
+        for (Integer id : hyponymsSet) {
+            String mapWords = this.wordMap.get(id).word;
+            String[] splitWords = mapWords.split(" ");
+            hyponymsWordSet.addAll(Arrays.asList(splitWords));
+        }
+        String[] result = hyponymsWordSet.toArray(new String[0]);
+
+        Arrays.sort(result);
         return result;
+
+    }
+
+    public HashSet<Integer> findHyponymsIds(String word) {
+        HashSet<Integer> result = new HashSet<Integer>();
+
+        for (GraphNode node : this.wordMap.values()) {
+            //split the words, find if target word exists
+            String[] words = node.word.split(" ");
+            for (String splitWord : words) {
+                if (splitWord.equals(word)) {
+                    findHyponymsByDFS(node, result);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    public void findHyponymsByDFS(GraphNode node, HashSet<Integer> set) {
+        set.add(node.id);
+        for (GraphNode hyponymNode : node.hyponymSet) {
+            findHyponymsByDFS(hyponymNode, set);
+        }
     }
 
 
     @Override
     public String handle(NgordnetQuery q) {
-        System.out.println(q.words().get(0));
-        return this.findHyponyms(q.words().get(0)).toString();
+        List<String> words = q.words();
+        int startYear = q.startYear();
+        int endYear = q.endYear();
+        int k = q.k();
+        if (k != 0) {
+            HashMap<String, Double> countMap = new HashMap<String, Double>();
+            String[] hyponyms = this.findHyponyms(words);
+
+            for (String hyponym : hyponyms) {
+                TimeSeries ts = this.ngramMap.countHistory(hyponym, startYear, endYear);
+                Double sum = 0.0;
+                for (Double value : ts.values()) {
+                    sum += value;
+                }
+                countMap.put(hyponym, sum);
+            }
+            List<String> topKKeys = countMap.entrySet().stream()
+                    .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                    .limit(k)
+                    .map(Map.Entry::getKey)
+                    .toList();
+            String[] result = topKKeys.toArray(new String[0]);
+            Arrays.sort(result);
+            return Arrays.toString(result) ;
+        }
+
+        return Arrays.toString(this.findHyponyms(q.words()));
     }
+
 
 }

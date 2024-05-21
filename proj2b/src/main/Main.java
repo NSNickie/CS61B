@@ -4,10 +4,10 @@ import browser.NgordnetServer;
 
 public class Main {
 
-    public static final String WORDS_FILE = "data/ngrams/very_short.csv";
+    public static final String WORDS_FILE = "data/ngrams/top_49887_words.csv";
     public static final String TOTAL_COUNTS_FILE = "data/ngrams/total_counts.csv";
-    public static final String SMALL_SYNSET_FILE = "data/wordnet/synsets16.txt";
-    public static final String SMALL_HYPONYM_FILE = "data/wordnet/hyponyms16.txt";
+    public static final String SMALL_SYNSET_FILE = "data/wordnet/synsets.txt";
+    public static final String SMALL_HYPONYM_FILE = "data/wordnet/hyponyms.txt";
 
     public static void main(String[] args) {
         NgordnetServer hns = new NgordnetServer();
@@ -23,7 +23,7 @@ public class Main {
         hns.startUp();
         hns.register("history", new DummyHistoryHandler());
         hns.register("historytext", new DummyHistoryTextHandler());
-        hns.register("hyponyms", new HyponymsHandler(SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE));
+        hns.register("hyponyms", new HyponymsHandler(WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE));
 
         System.out.println("Finished server startup! Visit http://localhost:4567/ngordnet.html");
     }

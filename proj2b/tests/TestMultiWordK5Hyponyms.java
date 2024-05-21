@@ -17,11 +17,35 @@ public class TestMultiWordK5Hyponyms {
     public void testFoodCakeK5() {
         NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
                 WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
-        List<String> words = List.of("food,cake");
+        List<String> words = List.of("food", "cake");
 
         NgordnetQuery nq = new NgordnetQuery(words, 1950, 1990, 5);
         String actual = studentHandler.handle(nq);
         String expected = "[biscuit, cake, kiss, snap, wafer]";
         assertThat(actual).isEqualTo(expected);
     }
+    @Test
+    public void testActK5() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("act");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 1950, 1990, 5);
+        String actual = studentHandler.handle(nq);
+        String expected = "[first, no, out, use, work]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void testTestK5() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("test");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 1950, 1990, 5);
+        String actual = studentHandler.handle(nq);
+        String expected = "[examination, final, run, test, trial]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
 }

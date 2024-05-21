@@ -7,7 +7,9 @@ import java.util.List;
 
 import static com.google.common.truth.Truth.assertThat;
 
-/** Tests the most basic case for Hyponyms where the list of words is one word long, and k = 0.*/
+/**
+ * Tests the most basic case for Hyponyms where the list of words is one word long, and k = 0.
+ */
 public class TestOneWordK0Hyponyms {
     // this case doesn't use the NGrams dataset at all, so the choice of files is irrelevant
     public static final String WORDS_FILE = "data/ngrams/very_short.csv";
@@ -26,6 +28,19 @@ public class TestOneWordK0Hyponyms {
         String expected = "[act, action, change, demotion, human_action, human_activity, variation]";
         assertThat(actual).isEqualTo(expected);
     }
+
+    @Test
+    public void testChangeK0() {
+        NgordnetQueryHandler studentHandler = AutograderBuddy.getHyponymHandler(
+                WORDS_FILE, TOTAL_COUNTS_FILE, SMALL_SYNSET_FILE, SMALL_HYPONYM_FILE);
+        List<String> words = List.of("change");
+
+        NgordnetQuery nq = new NgordnetQuery(words, 0, 0, 0);
+        String actual = studentHandler.handle(nq);
+        String expected = "[alteration, change, demotion, increase, jump, leap, modification, saltation, transition, variation]";
+        assertThat(actual).isEqualTo(expected);
+    }
+
 
     // TODO: Add more unit tests (including edge case tests) here.
 }
