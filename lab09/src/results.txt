@@ -1,0 +1,2 @@
+Apparently MyHashMap and Java's Built-in HashMap work much better than ULLMap.
+As the number increases, MyHashMap performance is not as good as industrial-strength implementation.
