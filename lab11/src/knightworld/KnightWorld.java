@@ -2,6 +2,7 @@ package knightworld;
 
 import tileengine.TERenderer;
 import tileengine.TETile;
+import tileengine.Tileset;
 
 import java.util.HashMap;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
 public class KnightWorld {
     public HashMap<Integer, int[]> templateMap;
 
-    private TETile[][] tiles;
+    private final TETile[][] tiles;
     // TODO: Add additional instance variables here
 
     public KnightWorld(int width, int height, int holeSize) {
@@ -19,25 +20,30 @@ public class KnightWorld {
         //  specified pattern of the given hole size for a window of size width x height. If you're stuck on how to
         //  begin, look at the provided demo code!
         this.tiles = new TETile[width][height];
-        this.initTempateMap();
+        this.initTemplateMap();
+        int unitX = 0;
+        int unitY = 0;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                unitX = (x / holeSize) % 5;
+                unitY = (y / holeSize) % 5;
 
+                this.tiles[x][y] = (this.templateMap.get(unitX))[unitY] == 1 ? Tileset.NOTHING : Tileset.WALL;
             }
         }
     }
 
-    public void initTempateMap() {
-        int[][] arrays = {
+    public void initTemplateMap() {
+        int[][] unitArray = {
                 {0, 0, 0, 1, 0},
                 {1, 0, 0, 0, 0},
                 {0, 0, 1, 0, 0},
                 {0, 0, 0, 0, 1},
                 {0, 1, 0, 0, 0}
         };
-
-        for (int i = 0; i < arrays.length; i++) {
-            this.templateMap.put(i, arrays[i]);
+        this.templateMap = new HashMap<Integer, int[]>();
+        for (int i = 0; i < unitArray.length; i++) {
+            this.templateMap.put(i, unitArray[i]);
         }
     }
 
@@ -50,9 +56,9 @@ public class KnightWorld {
 
     public static void main(String[] args) {
         // Change these parameters as necessary
-        int width = 50;
-        int height = 30;
-        int holeSize = 2;
+        int width = 60;
+        int height = 45;
+        int holeSize = 3;
 
         KnightWorld knightWorld = new KnightWorld(width, height, holeSize);
 
